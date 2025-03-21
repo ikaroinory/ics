@@ -1,0 +1,10 @@
+.vs
+.idea
+
+__pycache__
+
+data
+logs
+saves
+
+test.py
