@@ -8,7 +8,14 @@ from Logger import Logger
 
 
 def _a2():
-    df = pd.read_csv('data/original/SWaT_Dataset_Normal_v1.csv')
+    data_path = 'data/original/SWaT_Dataset_Normal_v1.csv'
+
+    try:
+        df = pd.read_csv(data_path)
+    except FileNotFoundError:
+        Logger.error(f'Data {data_path} not exist.')
+        Logger.error('Please download the dataset from https://itrust.sutd.edu.sg/ and place it in data/original')
+        return
 
     # Set datetime index
     df['Timestamp'] = pd.to_datetime(df['Timestamp'], format=' %d/%m/%Y %I:%M:%S %p')

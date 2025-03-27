@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from torch import nn
 from torch_geometric.nn import GATConv
 
-from models.EdgeGenerator import EdgeGenerator
+from models_old.EdgeGenerator import EdgeGenerator
 
 
 class HiddenRelationModule(nn.Module):

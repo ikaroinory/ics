@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 from Logger import Logger
 from TimeSeriesDataset import TimeSeriesDataset
-from models import ICS
+from models_old import ICS
 
 
 def parse_arguments():
