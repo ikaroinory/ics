@@ -23,17 +23,20 @@ class BasicRelationModule(nn.Module):
 
         self.doubly_residua = NBeatsNet(backcast_length=sequence_length, forecast_length=output_dim, device=device)
 
+        self.to(device)
+
     def forward(self, x: torch.Tensor):
         batch_size = x.shape[0]
         edges, weights = self.edge_extractor(x, x)  # [batch_size, 2, num_nodes * k], [batch_size, num_nodes * k]
 
         out = self.graph_layer(x, edges, weights)
-        print(out)
+        print(out.shape)
 
         return out, out
 
 
 if __name__ == '__main__':
-    x = torch.randn([32, 51, 100], dtype=torch.float32, device='cuda')
-    model = BasicRelationModule(sequence_length=100, hidden_dim=128, output_dim=1, k=3, device='cuda').to('cuda')
+    device = 'cpu'
+    x = torch.rand([32, 51, 100], device=device).double()
+    model = BasicRelationModule(sequence_length=100, hidden_dim=128, output_dim=1, k=3, device=device).to(device).double()
     b, f = model(x)

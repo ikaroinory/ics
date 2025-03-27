@@ -30,9 +30,8 @@ class GraphLayer(nn.Module):
         batch = Batch.from_data_list(data_list)
 
         out = self.gat(batch.x, batch.edge_index, batch.edge_attr)
-        out = out.reshape(batch_size, -1, self.output_dim)
-
         out = self.bn(out)
         out = self.activation(out)
+        out = out.reshape(batch_size, -1, self.output_dim)
 
         return out
