@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from torch_geometric.data import Batch, Data
 
 from models.components import CosineEdgeExtractor, GraphLayer, NBeatsNet
 
@@ -21,7 +22,7 @@ class BasicRelationModule(nn.Module):
 
         self.graph_layer = GraphLayer(sequence_length=sequence_length, output_dim=hidden_dim)
 
-        self.doubly_residua = NBeatsNet(backcast_length=sequence_length, forecast_length=output_dim, device=device)
+        self.doubly_residua = NBeatsNet(backcast_length=sequence_length, forecast_length=output_dim)
 
         self.to(device)
 
@@ -30,7 +31,6 @@ class BasicRelationModule(nn.Module):
         edges, weights = self.edge_extractor(x, x)  # [batch_size, 2, num_nodes * k], [batch_size, num_nodes * k]
 
         out = self.graph_layer(x, edges, weights)
-        print(out.shape)
 
         return out, out
 
@@ -38,5 +38,10 @@ class BasicRelationModule(nn.Module):
 if __name__ == '__main__':
     device = 'cpu'
     x = torch.rand([32, 51, 100], device=device).double()
-    model = BasicRelationModule(sequence_length=100, hidden_dim=128, output_dim=1, k=3, device=device).to(device).double()
+
+    # model = BasicRelationModule(sequence_length=100, hidden_dim=128, output_dim=10, k=3, device=device).to(device).double()
+    # b, f = model(x)
+
+    model = NBeatsNet(backcast_length=100, forecast_length=10).to(device).double()
     b, f = model(x)
+    print(b.shape, f.shape)

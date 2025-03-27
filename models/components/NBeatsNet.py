@@ -192,12 +192,6 @@ class Block(nn.Module):
         x = F.relu(self.fc4(x))
         return x
 
-    def __str__(self):
-        block_type = type(self).__name__
-        return f'{block_type}(units={self.units}, thetas_dim={self.thetas_dim}, ' \
-               f'backcast_length={self.backcast_length}, forecast_length={self.forecast_length}, ' \
-               f'share_thetas={self.share_thetas}) at @{id(self)}'
-
 
 class SeasonalityBlock(Block):
 

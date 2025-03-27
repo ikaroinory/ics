@@ -9,7 +9,7 @@ class GraphLayer(nn.Module):
     Input Shape:
         - ``x``: [batch_size, num_nodes, sequence_length]
         - ``edges``: [batch_size, 2, num_edges]
-        - ``weights``: [batch_size * num_edges]
+        - ``weights``: [batch_size, num_edges]
 
     Outputs Shape:
         - ``output``: [batch_size, num_nodes, output_dim]
@@ -29,9 +29,10 @@ class GraphLayer(nn.Module):
         data_list = [Data(x=x[i], edge_index=edges[i], edge_attr=weights[i].unsqueeze(1)) for i in range(batch_size)]
         batch = Batch.from_data_list(data_list)
 
-        out = self.gat(batch.x, batch.edge_index, batch.edge_attr)
+        # [batch_size * num_nodes, output_dim], [2, batch_size * num_edges], [batch_size * num_edges]
+        out = self.gat(batch['x'], batch['edge_index'], batch['edge_attr'])
         out = self.bn(out)
         out = self.activation(out)
-        out = out.reshape(batch_size, -1, self.output_dim)
+        out = out.reshape(batch_size, -1, self.output_dim)  # [batch_size * num_nodes, output_dim] -> [batch_size, num_nodes, output_dim]
 
         return out

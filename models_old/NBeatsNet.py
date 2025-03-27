@@ -231,24 +231,3 @@ class TrendBlock(Block):
         backcast = trend_model(self.theta_b_fc(x), self.backcast_linspace, self.device)
         forecast = trend_model(self.theta_f_fc(x), self.forecast_linspace, self.device)
         return backcast, forecast
-
-
-class GenericBlock(Block):
-
-    def __init__(self, units, thetas_dim, device, backcast_length=10, forecast_length=5, nb_harmonics=None):
-        super(GenericBlock, self).__init__(units, thetas_dim, device, backcast_length, forecast_length)
-
-        self.backcast_fc = nn.Linear(thetas_dim, backcast_length)
-        self.forecast_fc = nn.Linear(thetas_dim, forecast_length)
-
-    def forward(self, x):
-        # no constraint for generic arch.
-        x = super(GenericBlock, self).forward(x)
-
-        theta_b = self.theta_b_fc(x)
-        theta_f = self.theta_f_fc(x)
-
-        backcast = self.backcast_fc(theta_b)  # generic. 3.3.
-        forecast = self.forecast_fc(theta_f)  # generic. 3.3.
-
-        return backcast, forecast
